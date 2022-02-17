@@ -41,7 +41,8 @@ CREATE TABLE `tbl_users` (
 --
 -- password = password // for "test" user
 INSERT INTO `tbl_users` (`id`, `name`, `email`, `password`, `accepted`, `admin`) VALUES
-(1, 'test', 'test@test.com', '$2b$12$DcrFDJ0sKt6KrAd2OK2XweAimrfBkXVtOW8LI8y1DQJsxnZ10HU4e', 1, 0);
+(1, 'admin', 'admin@admin.com', '$2b$12$DcrFDJ0sKt6KrAd2OK2XweAimrfBkXVtOW8LI8y1DQJsxnZ10HU4e', 1, 1),
+(2, 'test', 'test@test.com', '$2b$12$DcrFDJ0sKt6KrAd2OK2XweAimrfBkXVtOW8LI8y1DQJsxnZ10HU4e', 1, 0);
 
 --
 -- Indexes for dumped tables
