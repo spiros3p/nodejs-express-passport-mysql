@@ -4,7 +4,7 @@ exports.checkAuthenticated = function (req, res, next) {
     if (req.isAuthenticated()) {
         return next()
     }
-    res.status(400).json({ "statusCode": 400, "message": "not authenticated" })
+    res.status(401).json({ "statusCode": 401, "message": "not authenticated" })
 }
 
 exports.checkNotAuthenticated = function (req, res, next) {
@@ -19,7 +19,7 @@ exports.checkAdmin = async function (req, res, next) {
     try {
         const user = await User.find(req.session.passport.user.email);
         if (!user[0][0].admin) {
-            res.status(400).json({ "statusCode": 400, "message": "No Admin status found" })
+            res.status(403).json({ "statusCode": 403, "message": "No Admin status found" })
             return
         }
         next();
@@ -36,7 +36,7 @@ exports.checkAccepted = async function (req, res, next) {
         const user = await User.find(req.session.passport.user.email);
         if (!user[0][0].accepted) {
             req.logout();
-            res.status(400).json({ "statusCode": 400, "message": "Not accepted yet" })
+            res.status(403).json({ "statusCode": 403, "message": "Not accepted yet" })
             return
         }
         next();
