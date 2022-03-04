@@ -4,16 +4,13 @@ dotenv.config();
 
 // EXPRESS 
 const express = require('express');
-
 const bodyParser = require('body-parser');
 
-const authRoutes = require('./routes/auth');
-
-const adminRoutes = require('./routes/admin');
-
-const errorController = require('./controllers/error');
-
 const app = express();
+
+const authRoutes = require('./routes/auth');
+const adminRoutes = require('./routes/admin');
+const errorController = require('./controllers/error');
 
 // PASSPORT 
 const passport = require('passport');
@@ -27,8 +24,6 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.use(bodyParser.json());
 
 app.use((req, res, next) => {
   // res.setHeader('Access-Control-Allow-Origin', '*');
@@ -57,12 +52,15 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/auth', authRoutes);
+const proxyRoutes = require('./routes/proxy');
+app.use('/proxy', proxyRoutes);
 
+app.use(bodyParser.json());
+
+app.use('/auth', authRoutes);
 app.use('/admin', adminRoutes);
 
 app.use(errorController.get404);
-
 app.use(errorController.get500);
 
 app.listen(3000, () => {
