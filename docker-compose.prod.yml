@@ -32,10 +32,11 @@ services:
       MYSQL_HOST: docker-db
       SESSION_SECRET: ${SESSION_SECRET}
       FRONT_END_IP: ${FRONT_END_IP}
-    # networks:
-    #   - mynet
+      PROXY_IP: ${PROXY_IP}
     volumes:
       - ./:/backend
+    # networks:
+    #   - mynet
       
   docker-phpmyadmin:
     depends_on:
