@@ -42,6 +42,10 @@ exports.deleteUser = async (req, res, next) => {
 
 exports.updateUser = async (req, res, next) => {
   try {
+    if (typeof req.body.accepted === 'undefined'){
+      res.status(400).json({ "statusCode": 400, "message": "Wrong update request" })
+      return
+    }
     const result = await User.update(req.params.id, req.body);
     if (result[0].affectedRows) {
       res.status(201).json({ message: 'User Updated!' });
