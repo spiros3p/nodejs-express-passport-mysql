@@ -2,8 +2,20 @@ const User = require('../models/user');
 
 exports.fetchUsers = async (req, res, next) => {
   try {
-    const [allUsers] = await User.fetchAllUsers();
+    const [allUsers] = await User.getMultiple();
     res.status(200).json(removePassword(allUsers));
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+}
+
+exports.fetchUser = async (req, res, next) => {
+  try {
+    const [allUsers] = await User.get(req.params.id);
+    res.status(200).json(removePassword(allUsers)[0]);
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -14,7 +26,7 @@ exports.fetchUsers = async (req, res, next) => {
 
 exports.deleteUser = async (req, res, next) => {
   try {
-    const deleteResponse = await User.delete(req.params.id);
+    const deleteResponse = await User.remove(req.params.id);
     if (deleteResponse[0].affectedRows) {
       res.status(200).json({ message: 'User was succesfully deleted' });
     } else {
@@ -28,11 +40,11 @@ exports.deleteUser = async (req, res, next) => {
   }
 }
 
-exports.toggleUserAccepted = async (req, res, next) => {
+exports.updateUser = async (req, res, next) => {
   try {
-    const result = await User.toggleUserAccepted(req.params.id);
+    const result = await User.update(req.params.id, req.body);
     if (result[0].affectedRows) {
-      res.status(201).json({ message: 'User acceptance in the app changed!' });
+      res.status(201).json({ message: 'User Updated!' });
     } else {
       res.status(400).json({ "statusCode": 400, "message": "User Not Found" })
     }

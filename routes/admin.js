@@ -15,11 +15,18 @@ router.get(
     adminController.fetchUsers
 );
 
-router.patch(
-    '/users/:id/accepted',
+router.get(
+    '/users/:id',
     checkAuthentication.checkAuthenticated,
     checkAuthentication.checkAdmin,
-    adminController.toggleUserAccepted
+    adminController.fetchUser
+);
+
+router.patch(
+    '/users/:id',
+    checkAuthentication.checkAuthenticated,
+    checkAuthentication.checkAdmin,
+    adminController.updateUser
 );
 
 router.delete(
