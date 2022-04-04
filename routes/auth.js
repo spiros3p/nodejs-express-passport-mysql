@@ -37,7 +37,7 @@ router.post('/login',
     checkAuthentication.checkAccepted,
     (req, res) => {
         delete req.user['password'];
-        res.status(200).json({ "statusCode": 200, "user": req.user });
+        res.status(200).json({ "user": req.user });
     }
 );
 
@@ -57,7 +57,7 @@ router.post('/isAdmin',
 );
 
 router.post('/logout',
-    checkAuthentication.checkAuthenticated,
+    // checkAuthentication.checkAuthenticated,
     authController.logout
 );
 

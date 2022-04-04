@@ -10,8 +10,8 @@ const adminController = require('../controllers/admin');
 
 router.get(
     '/users',
-    // checkAuthentication.checkAuthenticated,
-    // checkAuthentication.checkAdmin,
+    checkAuthentication.checkAuthenticated,
+    checkAuthentication.checkAdmin,
     adminController.fetchUsers
 );
 
@@ -24,8 +24,8 @@ router.get(
 
 router.patch(
     '/users/:id',
-    // checkAuthentication.checkAuthenticated,
-    // checkAuthentication.checkAdmin,
+    checkAuthentication.checkAuthenticated,
+    checkAuthentication.checkAdmin,
     adminController.updateUser
 );
 

@@ -8,7 +8,7 @@ const User = require('../models/user');
 exports.logout = (req, res, next) => {
   try {
     req.logout();
-    res.status(200).json({ "statusCode": 200, "message": "Succsesfully Logged Out" });
+    res.status(200).json({ "message": "Succsesfully Logged Out" });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
