@@ -54,7 +54,6 @@ app.use((req, res, next) => {
 
 // SWAGGER - start
 const swaggerUI = require("swagger-ui-express");
-// const swaggerUI2 = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
 const options = {
 	definition: {
