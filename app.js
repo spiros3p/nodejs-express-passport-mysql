@@ -52,6 +52,33 @@ app.use((req, res, next) => {
   next();
 });
 
+// SWAGGER - start
+const swaggerUI = require("swagger-ui-express");
+// const swaggerUI2 = require("swagger-ui-express");
+const swaggerJsDoc = require("swagger-jsdoc");
+const options = {
+	definition: {
+		openapi: "3.0.0",
+		info: {
+			title: "Radio Management Server API",
+			version: "1.0.0",
+			description: "A simple Express Library API",
+		},
+		servers: [
+			{
+				url: "http://localhost:3000",
+			},
+		],
+	},
+	apis: ["./routes/*.js"],
+};
+const specs = swaggerJsDoc(options);
+const swaggerResourceDocument = require('./openapiTMF639.json');
+app.use("/rms-api-docs", swaggerUI.serve, (...args) => swaggerUI.setup(specs)(...args));
+app.use("/resource-api-docs", swaggerUI.serve, (...args) => swaggerUI.setup(swaggerResourceDocument)(...args));
+// SWAGGER - end
+
+
 const proxyRoutes = require('./routes/proxy');
 app.use('/proxy', proxyRoutes);
 

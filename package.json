@@ -28,7 +28,9 @@
     "mysql2": "^2.3.3",
     "nodemailer": "^6.4.17",
     "passport": "^0.4.1",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "swagger-jsdoc": "^6.2.0",
+    "swagger-ui-express": "^4.3.0"
   },
   "devDependencies": {
     "http-proxy-middleware": "^2.0.3",

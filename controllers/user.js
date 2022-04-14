@@ -30,7 +30,7 @@ exports.deleteUser = async (req, res, next) => {
     if (deleteResponse[0].affectedRows) {
       res.status(200).json({ message: 'User was succesfully deleted' });
     } else {
-      res.status(400).json({ "statusCode": 400, "message": "User Not Found" })
+      res.status(404).json({ "statusCode": 404, "message": "User Not Found" })
     }
   } catch (err) {
     if (!err.statusCode) {
@@ -43,14 +43,14 @@ exports.deleteUser = async (req, res, next) => {
 exports.updateUser = async (req, res, next) => {
   try {
     if (typeof req.body.accepted === 'undefined'){
-      res.status(400).json({ "statusCode": 400, "message": "Wrong update request" })
+      res.status(400).json({ "statusCode": 400, "message": "Wrong patch request" })
       return
     }
     const result = await User.update(req.params.id, req.body);
     if (result[0].affectedRows) {
       res.status(201).json({ message: 'User Updated!' });
     } else {
-      res.status(400).json({ "statusCode": 400, "message": "User Not Found" })
+      res.status(404).json({ "statusCode": 404, "message": "User Not Found" })
     }
   } catch (err) {
     if (!err.statusCode) {

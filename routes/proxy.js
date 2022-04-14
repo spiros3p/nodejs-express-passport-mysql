@@ -11,3 +11,10 @@ router.use('',
 )
 
 module.exports = router;
+
+/**
+ * @swagger
+ * tags:
+ *   name: Resource
+ *   description: "See same url at path: /resource-api-docs for the official TMF-639 OpenAPI Specs - accessed from the /proxy/resource path on our server"
+ */
