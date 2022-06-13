@@ -1,5 +1,7 @@
 FROM node:14.17 AS server-build
 
+ARG AUTH_PORT
+
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 COPY package*.json /usr/src/app/
@@ -9,6 +11,6 @@ COPY . /usr/src/app/
 # COPY .env /usr/src/app/.env
 # COPY ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 3000
+EXPOSE ${AUTH_PORT}
 
 CMD [ "npm", "run", "start" ]
