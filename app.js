@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
+const viewsRoutes = require('./routes/views'); // html
 const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
 const errorController = require('./controllers/error');
@@ -26,13 +27,15 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use((req, res, next) => {
-  // res.setHeader('Access-Control-Allow-Origin', '*');
+  // --------- USE for same origin - e.g., the html auth branch of this repo ---------
+  res.setHeader('Access-Control-Allow-Origin', '*');
   // 
-  const allowedOrigins = [process.env.FRONT_END_IP, 'http://localhost', 'http://localhost:4200', 'http://localhost:3306', 'http://0.0.0.0', 'http://0.0.0.0:4200', 'http://127.0.0.1', 'http://127.0.0.1:4200', 'http://127.0.0.1:3306'];
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-  }
+  // --------- USE BELOW for CORS on SPA ---------
+  // const allowedOrigins = [process.env.FRONT_END_IP, 'http://localhost', 'http://localhost:4200', 'http://localhost:3306', 'http://0.0.0.0', 'http://0.0.0.0:4200', 'http://127.0.0.1', 'http://127.0.0.1:4200', 'http://127.0.0.1:3306'];
+  // const origin = req.headers.origin;
+  // if (allowedOrigins.includes(origin)) {
+  //   res.setHeader('Access-Control-Allow-Origin', origin);
+  // }
   // 
   res.setHeader(
     'Access-Control-Allow-Methods',
@@ -52,7 +55,10 @@ app.use((req, res, next) => {
   next();
 });
 
-// SWAGGER - start
+// serve the static files from public folder - like css, js, images or even (optionally) index.js
+app.use(express.static("public"));
+
+/* // SWAGGER - start
 const swaggerUI = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
 const options = {
@@ -75,16 +81,17 @@ const specs = swaggerJsDoc(options);
 const swaggerResourceDocument = require('./openapiTMF639.json');
 app.use("/rms-api-docs", swaggerUI.serve, (...args) => swaggerUI.setup(specs)(...args));
 app.use("/resource-api-docs", swaggerUI.serve, (...args) => swaggerUI.setup(swaggerResourceDocument)(...args));
-// SWAGGER - end
+// SWAGGER - end */
 
-
-const proxyRoutes = require('./routes/proxy');
-app.use('/proxy', proxyRoutes);
+// const proxyRoutes = require('./routes/proxy');
+// app.use('/proxy', proxyRoutes);
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use('/auth', authRoutes);
-app.use('/admin', adminRoutes);
+// app.use('/auth', authRoutes);
+// app.use('/admin', adminRoutes);
+app.use('/', viewsRoutes);
 
 app.use(errorController.get404);
 app.use(errorController.get500);

@@ -6,7 +6,6 @@ const checkAuthentication = require("../passport/checkAuthentication");
 const authController = require('../controllers/auth');
 const passport = require('passport');
 
-
 /**
  * @swagger
  * /auth/signup:
