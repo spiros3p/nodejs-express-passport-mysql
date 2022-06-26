@@ -16,6 +16,12 @@
 * **VIEWS**: _./views/home.html_ (replace that with your desired .html file to protect)
 * **STATICs**: _./public/_ (throw the imgs, css, js files in here to be served along HTMLs
 
+### ROUTES
+
+* / ->  _./views/login.html_ 
+* /signup ->  _./views/signup.html_ 
+* /home ->  _./views/home.html_ 
+
 ### Deployment
 
 * 1st define environment variable in _.env_ (the address ones are not required for simple html (non-SPA) clients
