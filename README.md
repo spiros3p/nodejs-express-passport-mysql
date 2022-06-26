@@ -36,7 +36,8 @@
 * **REPLACE** _./views/home.html_ with your desired html that needs protection
 * **ADD** an a tag element in your _home.html_ for logging out (e.g., `<a href="/logout" class="btn btn-danger">Log out</a>`)
 * **ADD** all your .js, .css files in the _./public_ directory, so that express serves them as static files
-* either see docker deployment to fire up containers of 1. nodejs 2. a database
+* either see docker deployment to fire up containers of 1. nodejs 2. a database.    
+
 OR
 * manually run nodejs on a server and use PM2 manager for running it (use google - digital ocean has some good guides)
 
