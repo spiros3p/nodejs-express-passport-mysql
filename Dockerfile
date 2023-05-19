@@ -1,16 +1,16 @@
-FROM node:14.17 AS server-build
+FROM node:18.16 AS server-build
 
-ARG AUTH_PORT
+ARG PORT_BE
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
-COPY package*.json /usr/src/app/
+RUN mkdir -p /usr/src/backend
+WORKDIR /usr/src/backend
+COPY package*.json /usr/src/backend/
 RUN npm install
 RUN npm install bcrypt
-COPY . /usr/src/app/
-# COPY .env /usr/src/app/.env
+COPY . /usr/src/backend/
+# COPY .env /usr/src/backend/.env
 # COPY ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE ${AUTH_PORT}
+EXPOSE ${PORT_BE}
 
 CMD [ "npm", "run", "start" ]

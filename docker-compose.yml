@@ -1,61 +1,62 @@
 version: '3.9' # optional since v1.27.0
 services:
-  docker-db:
-    image: mysql:5.7
-    restart: unless-stopped
-    ports:
-      - '3306:3306'
-    # command: --default-authentication-plugin=mysql_native_password
-    env_file: ./.env
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: ${DB_DATABASE}
-    volumes:
-      - db_data:/var/lib/mysql
-#     networks:
-#       - mynet
+    myapp-db:
+        image: mysql:5.7
+        restart: unless-stopped
+        ports:
+            - '3306:3306'
+        # command: --default-authentication-plugin=mysql_native_password
+        env_file: ./.env
+        environment:
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_DATABASE: ${DB_DATABASE}
+        volumes:
+            - db_data:/var/lib/mysql
+    #     networks:
+    #       - mynet
 
-  docker-backend:
-    depends_on:
-      - docker-db
-    build:
-      context: .
-      dockerfile: Dockerfile.dev
-    restart: unless-stopped
-    ports:
-      - '3000:3000'
-    env_file: ./.env
-    environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_HOST: docker-db
-      SESSION_SECRET: ${SESSION_SECRET}
-      FRONT_END_IP: ${FRONT_END_IP}
-      PROXY_IP: ${PROXY_IP}
-    volumes:
-      - ./:/backend
-    # networks:
-    #   - mynet
-      
-  docker-phpmyadmin:
-    depends_on:
-      - docker-db
-    image: phpmyadmin/phpmyadmin
-    restart: unless-stopped
-    ports:
-      - '5001:80'
-    env_file: ./.env
-    environment:
-      PMA_HOST: docker-db
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-#     networks:
-#       - mynet
-      
+    myapp-backend:
+        depends_on:
+            - myapp-db
+        build:
+            context: .
+            dockerfile: Dockerfile
+            args:
+                PORT_BE: ${PORT_BE}
+        restart: unless-stopped
+        env_file: ./.env
+        ports:
+            - '${PORT_BE}:${PORT_BE}'
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_USER: ${DB_USER}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_HOST: myapp-db
+            SESSION_SECRET: ${SESSION_SECRET}
+            FRONT_END_IP: ${FRONT_END_IP}
+        volumes:
+            - ./:/usr/src/backend
+        # networks:
+        #   - mynet
+
+    myapp-phpmyadmin:
+        depends_on:
+            - myapp-db
+        image: phpmyadmin/phpmyadmin
+        restart: unless-stopped
+        ports:
+            - '8000:80'
+        env_file: ./.env
+        environment:
+            PMA_HOST: myapp-db
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+        # networks:
+        # - mynet
+
 volumes:
-  db_data: {}
+    db_data: {}
 
-# bridge network is the default one 
+# bridge network is the default one
 # networks:
 #   mynet:
 #     driver: bridge
