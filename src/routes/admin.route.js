@@ -4,17 +4,24 @@ import {
     checkAdmin,
 } from '../middleware/authentication.middleware.js';
 import {
-    fetchUsers,
-    fetchUser,
+    getUsers,
+    getUser,
     updateUser,
     deleteUser,
+    createUser,
 } from '../controllers/user.controller.js';
 
 const router = Router();
 
-router.get('/user', checkAuthenticated, checkAdmin, fetchUsers);
-router.get('/user/:id', checkAuthenticated, checkAdmin, fetchUser);
-router.post('/user/:id', checkAuthenticated, checkAdmin);
+router.post(
+    '/user',
+    checkAuthenticated,
+    checkAdmin,
+    // validationMissins,
+    createUser
+);
+router.get('/user', checkAuthenticated, checkAdmin, getUsers);
+router.get('/user/:id', checkAuthenticated, checkAdmin, getUser);
 router.patch('/user/:id', checkAuthenticated, checkAdmin, updateUser);
 router.delete('/user/:id', checkAuthenticated, checkAdmin, deleteUser);
 

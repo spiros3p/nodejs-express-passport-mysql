@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import { body } from 'express-validator';
-const router = Router();
 import { User } from '../models/user.model.js';
 import {
     checkNotAuthenticated,
@@ -8,8 +7,11 @@ import {
     checkAuthenticated,
     checkAdmin,
 } from '../middleware/authentication.middleware.js';
-import { signup, logout } from '../controllers/authentication.controller.js';
+import { logout } from '../controllers/authentication.controller.js';
 import passport from 'passport';
+import { createUser } from '../controllers/user.controller.js';
+
+const router = Router();
 
 router.post(
     '/signup',
@@ -28,7 +30,7 @@ router.post(
         body('password').trim().isLength({ min: 7 }),
     ],
     checkNotAuthenticated,
-    signup
+    createUser
 );
 
 router.post(
