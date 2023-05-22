@@ -16,14 +16,26 @@ const router = Router();
 
 router.post(
     '/user',
-    checkAuthenticated,
-    checkAdmin,
+    // checkAuthenticated,
+    // checkAdmin,
     validationUserSignUp,
     createUser
 );
-router.get('/user', checkAuthenticated, checkAdmin, getUsers);
-router.get('/user/:id', checkAuthenticated, checkAdmin, getUser);
-router.patch('/user/:id', checkAuthenticated, checkAdmin, updateUser);
+router.get(
+    '/user',
+    // checkAuthenticated, checkAdmin,
+    getUsers
+);
+router.get(
+    '/user/:id',
+    // checkAuthenticated, checkAdmin,
+    getUser
+);
+router.patch(
+    '/user/:id',
+    //  checkAuthenticated, checkAdmin,
+    updateUser
+);
 router.delete('/user/:id', checkAuthenticated, checkAdmin, deleteUser);
 
 /** Alternative */

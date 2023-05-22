@@ -35,9 +35,21 @@ export class User {
     }
 
     static update(id, data) {
-        return db.execute('UPDATE tbl_users SET accepted = ? WHERE id=?', [
-            data.accepted,
-            id,
-        ]);
+        const {
+            name = null,
+            email = null,
+            password = null,
+            isAccepted = null,
+            isAdmin = null,
+        } = data;
+
+        return db.execute(
+            `UPDATE tbl_users SET
+            name = IFNULL(?, name),
+            email = IFNULL(?, email),
+            isAccepted = IFNULL(?, isAccepted)
+          WHERE id = ?`,
+            [name, email, isAccepted, id]
+        );
     }
 }

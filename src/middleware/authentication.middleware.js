@@ -38,7 +38,7 @@ export async function checkAdmin(req, res, next) {
     }
 }
 
-export async function checkIsAllowed(req, res, next) {
+export async function checkIsAccepted(req, res, next) {
     try {
         const email = req.session.passport.user.email;
         const [user] = await User.findByEmail(email);

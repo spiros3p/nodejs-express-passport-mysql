@@ -1,13 +1,16 @@
 import { Router } from 'express';
-// import { body } from 'express-validator';
 import { User } from '../models/user.model.js';
 import {
     checkNotAuthenticated,
-    checkIsAllowed,
+    checkIsAccepted,
     checkAuthenticated,
     checkAdmin,
 } from '../middleware/authentication.middleware.js';
-import { logout } from '../controllers/authentication.controller.js';
+import {
+    logout,
+    okRespone,
+    loginResponse,
+} from '../controllers/authentication.controller.js';
 import passport from 'passport';
 import { createUser } from '../controllers/user.controller.js';
 import { validationUserSignUp } from '../middleware/validation.middleware.js';
@@ -20,20 +23,13 @@ router.post(
     '/login',
     checkNotAuthenticated,
     passport.authenticate('local'),
-    // checkIsAllowed,
-    (req, res) => {
-        delete req.user['password'];
-        res.status(200).json({ user: req.user });
-    }
+    // checkIsAccepted,
+    loginResponse
 );
 
-router.post('/isAuthenticated', checkAuthenticated, (req, res) => {
-    res.status(200).json({ statusCode: 200 });
-});
+router.post('/isAuthenticated', checkAuthenticated, okRespone);
 
-router.post('/isAdmin', checkAuthenticated, checkAdmin, (req, res) => {
-    res.status(200).json({ statusCode: 200 });
-});
+router.post('/isAdmin', checkAuthenticated, checkAdmin, okRespone);
 
 router.post(
     '/logout',

@@ -44,8 +44,8 @@ export async function getUsers(req, res, next) {
 
 export async function getUser(req, res, next) {
     try {
-        const [allUsers] = await User.get(req.params.id);
-        res.status(200).json(removePassword(allUsers)[0]);
+        const [result] = await User.get(req.params.id);
+        res.status(200).json(removePassword(result)[0]);
     } catch (err) {
         if (!err.statusCode) {
             err.statusCode = 500;
@@ -75,16 +75,15 @@ export async function deleteUser(req, res, next) {
 
 export async function updateUser(req, res, next) {
     try {
-        if (typeof req.body.accepted === 'undefined') {
-            res.status(400).json({
-                statusCode: 400,
-                message: 'Wrong patch request',
-            });
-            return;
-        }
-        const [result] = await User.update(req.params.id, req.body);
+        const id = req.params.id || req.body.id;
+        const data = req.body;
+        const [result] = await User.update(id, data);
+        const [user] = await User.findById(id);
         if (result.affectedRows) {
-            res.status(201).json({ message: 'User Updated!' });
+            res.status(201).json({
+                message: 'Updated successfully!',
+                data: removePassword(user)[0],
+            });
         } else {
             res.status(404).json({
                 statusCode: 404,
@@ -100,8 +99,8 @@ export async function updateUser(req, res, next) {
 }
 
 function removePassword(users) {
-    for (let user in users) {
-        delete users[user]['password'];
+    for (let index in users) {
+        delete users[index]['password'];
     }
     return users;
 }

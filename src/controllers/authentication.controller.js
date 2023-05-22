@@ -11,3 +11,12 @@ export function logout(req, res, next) {
         next(err);
     }
 }
+
+export function okRespone(req, res) {
+    res.status(200).json({ statusCode: 200 });
+}
+
+export function loginResponse(req, res) {
+    delete req.user['password'];
+    res.status(200).json({ user: req.user });
+}
