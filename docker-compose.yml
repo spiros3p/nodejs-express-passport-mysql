@@ -55,7 +55,6 @@ services:
 
 volumes:
     db_data: {}
-
 # bridge network is the default one
 # networks:
 #   mynet:
