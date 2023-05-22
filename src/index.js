@@ -10,6 +10,7 @@ import adminRoutes from './routes/admin.route.js';
 dotenv.config();
 const app = express();
 app.use(express.json());
+// app.use(express.urlencoded({ extended: false }));
 app.use(
     session({
         secret: process.env.SESSION_SECRET,

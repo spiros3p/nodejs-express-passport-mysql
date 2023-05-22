@@ -1,17 +1,19 @@
 import { User } from '../models/user.model.js';
-import { validationResult } from 'express-validator';
 import bcrypt from 'bcrypt';
 
-export async function createUser(req, res, next) {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.errors[0] });
+const checkExistingEmail = async (email) => {
+    const [users] = await User.findByEmail(email);
+    if (users.length > 0) {
+        throw new Error('Email address already exists!');
     }
+};
 
+export async function createUser(req, res, next) {
     const name = req.body.name;
     const email = req.body.email;
     const password = req.body.password;
     try {
+        await checkExistingEmail(email);
         const hashedPassword = await bcrypt.hash(password, 12);
         const userDetails = {
             name: name,
@@ -19,7 +21,6 @@ export async function createUser(req, res, next) {
             password: hashedPassword,
         };
         await User.create(userDetails);
-
         res.status(201).json({ message: 'User registered!' });
     } catch (err) {
         if (!err.statusCode) {
@@ -55,8 +56,8 @@ export async function getUser(req, res, next) {
 
 export async function deleteUser(req, res, next) {
     try {
-        const deleteResponse = await User.remove(req.params.id);
-        if (deleteResponse[0].affectedRows) {
+        const [deleteResponse] = await User.remove(req.params.id);
+        if (deleteResponse.affectedRows) {
             res.status(200).json({ message: 'User was succesfully deleted' });
         } else {
             res.status(404).json({
@@ -81,8 +82,8 @@ export async function updateUser(req, res, next) {
             });
             return;
         }
-        const result = await User.update(req.params.id, req.body);
-        if (result[0].affectedRows) {
+        const [result] = await User.update(req.params.id, req.body);
+        if (result.affectedRows) {
             res.status(201).json({ message: 'User Updated!' });
         } else {
             res.status(404).json({

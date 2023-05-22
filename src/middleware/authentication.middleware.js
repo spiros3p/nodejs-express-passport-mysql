@@ -20,8 +20,9 @@ export function checkNotAuthenticated(req, res, next) {
 
 export async function checkAdmin(req, res, next) {
     try {
-        const user = await User.find(req.session.passport.user.email);
-        if (!user[0][0].admin) {
+        const email = req.session.passport.user.email;
+        const [user] = await User.findByEmail(email);
+        if (!user[0].isAdmin) {
             res.status(403).json({
                 statusCode: 403,
                 message: 'No Admin status found',
@@ -37,10 +38,11 @@ export async function checkAdmin(req, res, next) {
     }
 }
 
-export async function checkAccepted(req, res, next) {
+export async function checkIsAllowed(req, res, next) {
     try {
-        const user = await User.find(req.session.passport.user.email);
-        if (!user[0][0].accepted) {
+        const email = req.session.passport.user.email;
+        const [user] = await User.findByEmail(email);
+        if (!user[0].isAllowed) {
             req.logout();
             res.status(403).json({
                 statusCode: 403,

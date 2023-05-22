@@ -1,43 +1,26 @@
 import { Router } from 'express';
-import { body } from 'express-validator';
+// import { body } from 'express-validator';
 import { User } from '../models/user.model.js';
 import {
     checkNotAuthenticated,
-    checkAccepted,
+    checkIsAllowed,
     checkAuthenticated,
     checkAdmin,
 } from '../middleware/authentication.middleware.js';
 import { logout } from '../controllers/authentication.controller.js';
 import passport from 'passport';
 import { createUser } from '../controllers/user.controller.js';
+import { validationUserSignUp } from '../middleware/validation.middleware.js';
 
 const router = Router();
 
-router.post(
-    '/signup',
-    [
-        body('name').trim().not().isEmpty(),
-        body('email')
-            .isEmail()
-            .withMessage('Please enter a valid email.')
-            .custom(async (email) => {
-                const user = await User.find(email);
-                if (user[0].length > 0) {
-                    return Promise.reject('Email address already exist!');
-                }
-            })
-            .normalizeEmail({ gmail_remove_dots: false }),
-        body('password').trim().isLength({ min: 7 }),
-    ],
-    checkNotAuthenticated,
-    createUser
-);
+router.post('/signup', checkNotAuthenticated, validationUserSignUp, createUser);
 
 router.post(
     '/login',
     checkNotAuthenticated,
     passport.authenticate('local'),
-    checkAccepted,
+    // checkIsAllowed,
     (req, res) => {
         delete req.user['password'];
         res.status(200).json({ user: req.user });

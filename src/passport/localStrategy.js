@@ -4,9 +4,9 @@ import bcrypt from 'bcrypt';
 
 const authenticateUser = async (req, email, password, done) => {
     try {
-        const user = await User.findByEmail(email);
+        const [user] = await User.findByEmail(email);
 
-        if (user[0].length !== 1) {
+        if (user.length !== 1) {
             const error = new Error('Wrong Credentials...');
             error.statusCode = 401;
             throw error;

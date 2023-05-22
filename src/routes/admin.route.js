@@ -10,6 +10,7 @@ import {
     deleteUser,
     createUser,
 } from '../controllers/user.controller.js';
+import { validationUserSignUp } from '../middleware/validation.middleware.js';
 
 const router = Router();
 
@@ -17,7 +18,7 @@ router.post(
     '/user',
     checkAuthenticated,
     checkAdmin,
-    // validationMissins,
+    validationUserSignUp,
     createUser
 );
 router.get('/user', checkAuthenticated, checkAdmin, getUsers);
